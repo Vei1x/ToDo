@@ -13,12 +13,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class TodoTodoTaskServiceImpl implements TodoTaskService {
+public class TodoTaskServiceImpl implements TodoTaskService {
     final TodoTaskMapper mapper;
     final TodoTaskRepository repository;
 
     @Autowired
-    public TodoTodoTaskServiceImpl(TodoTaskMapper mapper, TodoTaskRepository repository) {
+    public TodoTaskServiceImpl(TodoTaskMapper mapper, TodoTaskRepository repository) {
         this.mapper = mapper;
         this.repository = repository;
     }
@@ -46,10 +46,8 @@ public class TodoTodoTaskServiceImpl implements TodoTaskService {
 
     @Override
     public TodoTask editTask(TodoTask newTodoTask) {
-        TodoTask oldTodoTask = mapper.fromDAO(repository.getReferenceById(newTodoTask.getId()));
-        oldTodoTask.setName(newTodoTask.getName());
-        oldTodoTask.setDescription(newTodoTask.getDescription());
-        return mapper.fromDAO(repository.save(mapper.toDAO(oldTodoTask)));
+        TodoTaskDao todoTaskDao = repository.save(mapper.toDAO(newTodoTask));
+        return mapper.fromDAO(todoTaskDao);
 
     }
 }

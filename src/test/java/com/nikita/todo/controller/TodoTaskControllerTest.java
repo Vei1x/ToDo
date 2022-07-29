@@ -1,7 +1,7 @@
 package com.nikita.todo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nikita.todo.business.service.impl.TodoTodoTaskServiceImpl;
+import com.nikita.todo.business.service.impl.TodoTaskServiceImpl;
 import com.nikita.todo.model.TodoTask;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,9 +33,8 @@ class TodoTaskControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TodoTodoTaskServiceImpl service;
+    private TodoTaskServiceImpl service;
 
-    private RequestBuilder builder;
 
     private final String URL = "/api/v1/todo";
 

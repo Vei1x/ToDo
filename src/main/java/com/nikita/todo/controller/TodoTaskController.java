@@ -1,6 +1,6 @@
 package com.nikita.todo.controller;
 
-import com.nikita.todo.business.service.impl.TodoTodoTaskServiceImpl;
+import com.nikita.todo.business.service.impl.TodoTaskServiceImpl;
 import com.nikita.todo.model.TodoTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +21,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/v1/todo")
 public class TodoTaskController {
-    private final TodoTodoTaskServiceImpl service;
+    private final TodoTaskServiceImpl service;
     @Autowired
-    public TodoTaskController(TodoTodoTaskServiceImpl service) {
+    public TodoTaskController(TodoTaskServiceImpl service) {
         this.service = service;
     }
 

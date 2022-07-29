@@ -9,12 +9,4 @@ public class TodoApplication {
     public static void main(String[] args) {
         SpringApplication.run(TodoApplication.class, args);
     }
-
-//    @Bean
-//    CommandLineRunner commandLineRunner (TaskServiceImpl service){
-//        return args -> {
-//          service.createTask();
-//        };
-//    }
-
 }

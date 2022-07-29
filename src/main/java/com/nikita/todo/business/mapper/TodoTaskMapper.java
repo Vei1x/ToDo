@@ -5,7 +5,7 @@ import com.nikita.todo.model.TodoTask;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface TaskMapper {
+public interface TodoTaskMapper {
     TodoTaskDao toDAO(TodoTask todoTask);
     TodoTask fromDAO(TodoTaskDao todoTaskDao);
 }

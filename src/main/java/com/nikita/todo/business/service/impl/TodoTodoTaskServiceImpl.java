@@ -1,9 +1,9 @@
 package com.nikita.todo.business.service.impl;
 
-import com.nikita.todo.business.mapper.TaskMapper;
-import com.nikita.todo.business.repository.TaskRepository;
+import com.nikita.todo.business.mapper.TodoTaskMapper;
+import com.nikita.todo.business.repository.TodoTaskRepository;
 import com.nikita.todo.business.repository.model.TodoTaskDao;
-import com.nikita.todo.business.service.TaskService;
+import com.nikita.todo.business.service.TodoTaskService;
 import com.nikita.todo.model.TodoTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,23 +13,23 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class TaskServiceImpl implements TaskService {
-    final TaskMapper mapper;
-    final TaskRepository repository;
+public class TodoTodoTaskServiceImpl implements TodoTaskService {
+    final TodoTaskMapper mapper;
+    final TodoTaskRepository repository;
 
     @Autowired
-    public TaskServiceImpl(TaskMapper mapper, TaskRepository repository) {
+    public TodoTodoTaskServiceImpl(TodoTaskMapper mapper, TodoTaskRepository repository) {
         this.mapper = mapper;
         this.repository = repository;
     }
 
-    public List<TodoTask> getAllTasks() {
+    public List<TodoTask> findAllTasks() {
         List<TodoTaskDao> list = repository.findAll();
         return list.stream().map(mapper::fromDAO).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<TodoTask> getTaskById(Long id) {
+    public Optional<TodoTask> findTaskById(Long id) {
         return repository.findById(id).map(mapper::fromDAO);
     }
 

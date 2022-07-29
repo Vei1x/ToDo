@@ -1,6 +1,6 @@
 package com.nikita.todo.controller;
 
-import com.nikita.todo.business.service.impl.TaskServiceImpl;
+import com.nikita.todo.business.service.impl.TodoTodoTaskServiceImpl;
 import com.nikita.todo.model.TodoTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,16 +20,16 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/v1/todo")
-public class TaskController {
-    private final TaskServiceImpl service;
+public class TodoTaskController {
+    private final TodoTodoTaskServiceImpl service;
     @Autowired
-    public TaskController(TaskServiceImpl service) {
+    public TodoTaskController(TodoTodoTaskServiceImpl service) {
         this.service = service;
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<TodoTask> getTaskById(@PathVariable Long id) {
-        Optional<TodoTask> task = service.getTaskById(id);
+        Optional<TodoTask> task = service.findTaskById(id);
         return task.map(value -> new ResponseEntity<>(value, HttpStatus.FOUND))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
@@ -37,7 +37,7 @@ public class TaskController {
 
     @GetMapping
     ResponseEntity<List<TodoTask>> getAllTasks() {
-        List<TodoTask> list = service.getAllTasks();
+        List<TodoTask> list = service.findAllTasks();
         return !list.isEmpty() ? new ResponseEntity<>(list, HttpStatus.FOUND) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -47,7 +47,7 @@ public class TaskController {
         if (newTodoTask.getId() != null || result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(service.addTask(newTodoTask), HttpStatus.OK);
+        return new ResponseEntity<>(service.addTask(newTodoTask), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -56,7 +56,7 @@ public class TaskController {
                                           BindingResult bindingResult) {
         if (!id.equals(newTodoTask.getId()) || bindingResult.hasErrors())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (!service.getTaskById(newTodoTask.getId()).isPresent())
+        if (!service.findTaskById(newTodoTask.getId()).isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         service.editTask(newTodoTask);

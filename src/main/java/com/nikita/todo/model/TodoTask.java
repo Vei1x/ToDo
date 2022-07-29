@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -14,8 +15,11 @@ public class TodoTask {
 
     @ApiModelProperty(hidden = true)
     Long id;
+
     @NotNull
+    @NotEmpty
     String name;
+
     @NotNull
     String description;
 

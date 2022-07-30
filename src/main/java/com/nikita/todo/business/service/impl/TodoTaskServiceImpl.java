@@ -35,7 +35,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     @Override
     public void deleteTaskById(Long id) {
-
+        repository.deleteById(id);
     }
 
     @Override

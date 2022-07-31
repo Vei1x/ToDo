@@ -5,6 +5,8 @@ import com.nikita.todo.business.repository.TodoTaskRepository;
 import com.nikita.todo.business.repository.model.TodoTaskDao;
 import com.nikita.todo.business.service.TodoTaskService;
 import com.nikita.todo.model.TodoTask;
+import com.sun.tools.javac.comp.Todo;
+import com.vaadin.flow.router.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     @Override
     public void deleteTaskById(Long id) {
-        repository.deleteById(id);
+       repository.deleteById(id);
     }
 
     @Override

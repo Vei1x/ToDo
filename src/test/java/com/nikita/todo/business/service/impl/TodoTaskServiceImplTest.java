@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,7 +42,7 @@ class TodoTaskServiceImplTest {
 
     private TodoTask todoTask;
     private TodoTaskDao todoTaskDao;
-    private List<TodoTask> todoTaskList;
+
     private List<TodoTaskDao> todoTaskDaoList;
 
 
@@ -49,7 +50,6 @@ class TodoTaskServiceImplTest {
     public void init() {
         todoTask = createTodoTask();
         todoTaskDao = createTodoTaskDao();
-        todoTaskList = createTodoTaskList(todoTask);
         todoTaskDaoList = createTodoTaskDaoList(todoTaskDao);
     }
 
@@ -59,7 +59,7 @@ class TodoTaskServiceImplTest {
     }
 
     @Test
-    void getAllTasks(){
+    void getAllTasks() {
         when(repository.findAll()).thenReturn(todoTaskDaoList);
         when(mapper.fromDAO(todoTaskDao)).thenReturn(todoTask);
 
@@ -69,8 +69,9 @@ class TodoTaskServiceImplTest {
 
         verify(repository, times(1)).findAll();
     }
+
     @Test
-    void getAllTasksEmpty(){
+    void getAllTasksEmpty() {
         when(repository.findAll()).thenReturn(Collections.emptyList());
         Assertions.assertTrue(service.findAllTasks().isEmpty());
         verify(repository, times(1)).findAll();
@@ -115,7 +116,19 @@ class TodoTaskServiceImplTest {
         TodoTask task = service.editTask(todoTask);
         assertEquals(todoTask.getId(), task.getId());
         verify(repository, times(1)).save(todoTaskDao);
+    }
+    @Test
+    void editWrongTask() {
+        when(repository.save(todoTaskDao)).thenThrow(new IllegalArgumentException());
+        when(mapper.toDAO(todoTask)).thenReturn(todoTaskDao);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> service.editTask(todoTask));
+        verify(repository, times(1)).save(todoTaskDao);
+    }
 
+    @Test
+    void deleteTask(){
+        service.deleteTaskById(1L);
+        verify(repository, times(1)).deleteById(1L);
     }
 
     public TodoTask createTodoTask() {
@@ -126,14 +139,14 @@ class TodoTaskServiceImplTest {
         return new TodoTaskDao(1L, "test", "test");
     }
 
-    public List<TodoTask> createTodoTaskList(TodoTask todoTask){
+    public List<TodoTask> createTodoTaskList(TodoTask todoTask) {
         List<TodoTask> list = new ArrayList<>();
         list.add(todoTask);
         list.add(todoTask);
         return list;
     }
 
-    public List<TodoTaskDao> createTodoTaskDaoList(TodoTaskDao todoTaskDao){
+    public List<TodoTaskDao> createTodoTaskDaoList(TodoTaskDao todoTaskDao) {
         List<TodoTaskDao> list = new ArrayList<>();
         list.add(todoTaskDao);
         list.add(todoTaskDao);

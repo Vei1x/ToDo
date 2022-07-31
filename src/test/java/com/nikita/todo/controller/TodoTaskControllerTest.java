@@ -1,6 +1,7 @@
 package com.nikita.todo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nikita.todo.business.repository.model.TodoTaskDao;
 import com.nikita.todo.business.service.impl.TodoTaskServiceImpl;
 import com.nikita.todo.model.TodoTask;
 import org.junit.jupiter.api.Test;
@@ -183,10 +184,34 @@ class TodoTaskControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(service, times(0)).editTask(task);
-
     }
 
-    public TodoTask createTask(Long id){
+    @Test
+    void deleteTask() throws Exception {
+        TodoTask task = createTask(1L);
+        when(service.findTaskById(task.getId())).thenReturn(Optional.of(task));
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete(URL + "/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(service, times(1)).deleteTaskById(task.getId());
+    }
+
+    @Test
+    void deleteFeedbackInvalid() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete(URL + "/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(service, times(0)).deleteTaskById(1L);
+    }
+
+
+        public TodoTask createTask(Long id){
         return new TodoTask(id, "test","test");
     }
 

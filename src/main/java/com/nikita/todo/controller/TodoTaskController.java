@@ -12,30 +12,32 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping(value = "/api/v1/todo")
+@RequestMapping(value = "/api/v1")
 public class TodoTaskController {
     private final TodoTaskServiceImpl service;
+
     @Autowired
     public TodoTaskController(TodoTaskServiceImpl service) {
         this.service = service;
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/todos/{id}")
     public ResponseEntity<TodoTask> getTaskById(@PathVariable Long id) {
         Optional<TodoTask> task = service.findTaskById(id);
-        return task.map(value -> new ResponseEntity<>(value, HttpStatus.FOUND))
+        return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
     }
 
-    @GetMapping
+    @GetMapping("/todos")
     ResponseEntity<List<TodoTask>> getAllTasks() {
         List<TodoTask> list = service.findAllTasks();
-        return !list.isEmpty() ? new ResponseEntity<>(list, HttpStatus.FOUND) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return !list.isEmpty() ? new ResponseEntity<>(list, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping
+    @PostMapping("/todos")
     ResponseEntity<TodoTask> addTask(@Valid @RequestBody TodoTask newTodoTask,
                                      BindingResult result) {
         if (newTodoTask.getId() != null || result.hasErrors()) {
@@ -44,7 +46,7 @@ public class TodoTaskController {
         return new ResponseEntity<>(service.addTask(newTodoTask), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/todos/{id}")
     ResponseEntity<TodoTask> editTaskById(@PathVariable Long id,
                                           @Valid @RequestBody TodoTask newTodoTask,
                                           BindingResult bindingResult) {
@@ -57,8 +59,8 @@ public class TodoTaskController {
         return new ResponseEntity<>(newTodoTask, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    ResponseEntity<TodoTask> deleteTaskById(@PathVariable Long id){
+    @DeleteMapping("/todos/{id}")
+    ResponseEntity<TodoTask> deleteTaskById(@PathVariable Long id) {
         if (!service.findTaskById(id).isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         service.deleteTaskById(id);

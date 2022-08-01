@@ -1,7 +1,6 @@
 package com.nikita.todo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nikita.todo.business.repository.model.TodoTaskDao;
 import com.nikita.todo.business.service.impl.TodoTaskServiceImpl;
 import com.nikita.todo.model.TodoTask;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -37,7 +35,7 @@ class TodoTaskControllerTest {
     private TodoTaskServiceImpl service;
 
 
-    private final String URL = "/api/v1/todo";
+    private final String URL = "/api/v1/todos";
 
 
     @Test
@@ -50,7 +48,7 @@ class TodoTaskControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .get(URL + "/" + task.getId())
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isFound());
+                        .andExpect(status().isOk());
 
         verify(service, times(1))
                 .findTaskById(task.getId());
@@ -84,7 +82,7 @@ class TodoTaskControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(status().isFound());
+                .andExpect(status().isOk());
 
         verify(service,times(1)).findAllTasks();
     }
